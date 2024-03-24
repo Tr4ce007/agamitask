@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpine CRUD</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        *{
+            font-size: large;
+        }
+        h2{
+            font-size: 40px;
+        }
+        .box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .todo{
+            padding: 2px;
+            margin: 2px;
+            display: flex;
+            justify-content: space-between
+        }
+
+        button:hover{
+            cursor: pointer;
+        }
+        input, button{
+            margin: 5px;
+            padding: 5px;
+            border-radius: 10px;
+            text-decoration: none;
+        }
+
+        .completed {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <h2>Todo App Using Alpinejs</h2>
+        <div x-data="{todos : [], userInput: ''}">
+            <form x-on:submit.prevent>
+                <input x-model="userInput" type="text" placeholder="Enter ToDo item">
+                <button
+                    x-on:click="if(userInput.trim().length) todos.push({name: userInput, completed: false, id:todos.length}); userInput= ''">Add</button>
+                <button @click="todos = []" x-show="todos.length">Clear All</button>
+            </form>
+            <div style="margin: 5px; padding: 10px;">
+                <span x-text="todos.filter( (todo) => todo.completed).length" style="margin: 5px; padding: 5px;"></span>/
+                <span x-text="todos.length" style="margin: 4px; padding: 4px;"></span> Completed
+            </div>
+
+            <template x-for="todo in todos" :key="todo.id">
+                <div class="todo">
+                    <input type="checkbox" x-model="todo.completed">
+                    <span x-text="todo.name" :class="{'completed' : todo.completed}"></span>
+                    <button @click="todos = todos.filter( (currTodo) => currTodo != todo)">Delete</button>
+                </div>
+            </template>
+
+        </div>
+    </div>
+</body>
+
+</html>

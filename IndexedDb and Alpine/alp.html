@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alpine.js CRUD Example</title>
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.0.0/dist/alpine.min.js" defer></script>
+</head>
+<body>
+<div x-data="{ notes: [], newNote: '', editIndex: null, editText: '' }">
+  <!-- Add Note Form -->
+  <form @submit.prevent="addNote()">
+    <input type="text" x-model="newNote" placeholder="Enter a new note">
+    <button type="submit">Add Note</button>
+  </form>
+
+  <!-- List of Notes -->
+  <ul>
+    <template x-for="(note, index) in notes" :key="index">
+      <li x-show="editIndex !== index">
+        <span x-text="note"></span>
+        <button @click="editIndex = index; editText = note">Edit</button>
+        <button @click="deleteNote(index)">Delete</button>
+      </li>
+      <li x-show="editIndex === index">
+        <input type="text" x-model="editText">
+        <button @click="updateNote(index)">Save</button>
+        <button @click="cancelEdit()">Cancel</button>
+      </li>
+    </template>
+  </ul>
+</div>
+
+<script>
+  // Initialize Alpine.js
+  window.Alpine = require('alpinejs');
+
+  // Define the Alpine.js data and methods
+  Alpine.data('notes', () => ({
+    notes: [], // Array to store notes
+    newNote: '', // Variable to store new note input
+    editIndex: null, // Index of note being edited
+    editText: '', // Text of note being edited
+
+    // Function to add a new note
+    addNote() {
+      if (this.newNote.trim() !== '') {
+        this.notes.push(this.newNote);
+        this.newNote = ''; // Clear the input field
+      }
+    },
+
+    // Function to delete a note
+    deleteNote(index) {
+      this.notes.splice(index, 1);
+    },
+
+    // Function to update a note
+    updateNote(index) {
+      if (this.editText.trim() !== '') {
+        this.notes[index] = this.editText;
+        this.editIndex = null; // Clear the edit mode
+      }
+    },
+
+    // Function to cancel editing a note
+    cancelEdit() {
+      this.editIndex = null;
+    }
+  }));
+</script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpine CRUD</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        * {
+            font-size: large;
+        }
+
+        h2 {
+            font-size: 40px;
+        }
+
+        .box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .user {
+            padding: 2px;
+            margin: 2px;
+            display: flex;
+            justify-content: space-between
+        }
+
+        button:hover {
+            cursor: pointer;
+        }
+
+        input,
+        button {
+            margin: 5px;
+            padding: 5px;
+            border-radius: 10px;
+            text-decoration: none;
+        }
+
+        .completed {
+            text-decoration: line-through;
+        }
+    </style>
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <div class="box">
+        <h2>UserDataBase App Using Alpinejs & IndexedDB</h2>
+        <div x-data="{usersList: [], userInput:''}" x-init="fetchData">
+            <form x-on:submit.prevent>
+                <input x-model="userInput" type="text" placeholder="Enter User Name">
+                <button
+                    x-on:click="if(userInput.trim().length) onAdd(userInput); userInput= '';">Add</button>
+            </form>
+
+            <template x-if="usersList.length">
+                <template x-for="user in usersList" :key="user.id">
+                    <div class="user">
+                        <span x-text="user.name"></span>
+                        <div>
+                            <button @click="userInput=user.name;onEdit(user.id);">Edit</button>
+                            <button @click="onDelete(user.id)">Delete</button>
+                        </div>
+                    </div>
+                </template>
+            </template>
+
+        </div>
+    </div>
+</body>
+
+</html>
